@@ -1,0 +1,75 @@
+*{
+    padding: unset;
+    margin: unset;
+    box-sizing: border-box;
+}
+
+:root{
+    --color-primary : #218380;
+    --color-light : #fff;
+    --color-dark : #000;
+}
+
+@font-face {
+  font-family: Verdana;
+  src: url('./fonts/fa-solid-900.woff2');
+}
+
+body{
+    font-family: Verdana;
+}
+
+header{
+    background-color: var(--color-primary);
+    padding: 1.5rem;
+    color: var(--color-light);
+    font-size: 1.35rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    letter-spacing: 0.2px;
+}
+
+header i {
+    margin-left: 0.5rem;
+}
+
+.container{
+    padding: 1.5rem;
+}
+
+.quiz-container{
+    display : flex;
+    justify-content: center;
+    padding-top : 5rem;
+}
+
+.quiz-welcome-card{
+    border: 3px solid #c4c4c4;
+    padding: 4rem 2rem 2rem;
+    border-radius: 25px;
+    box-shadow : 10px 5px 5px 0px #cccccc;
+}
+
+.quiz-welcome-card-title{
+    margin-bottom : 0.75rem;
+}
+
+.quiz-welcome-card-description{
+    padding-bottom: 0.75rem;
+}
+
+.quiz-welcome-card-button{
+    background : var(--color-primary);
+    color: var(--color-light);
+    padding : 15px 20px;
+    margin-top : 0.75rem;
+    font-size : 1rem;
+    border : unset;
+    outline : unset;
+    border-radius : 10px;
+    font-weight : 500;
+    cursor: pointer;
+}
