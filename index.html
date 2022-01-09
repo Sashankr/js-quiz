@@ -12,23 +12,37 @@
 
 <body>
     <header>
-        <a id=leaderboard>View Highscores <i class="fas fa-hand-point-left fa-lg"></i>
-        </i></a> 
+        <p id=leaderboard>View Highscores <i class="fas fa-hand-point-left fa-lg"></i>
+        </i></p> 
+        <!-- <a href="./assets/style-guide.html" target="_blank" >Style guide</a>
+         -->
         <p>Time : </p> 
     </header>
     <main>
         <div class="container">
             <div class="quiz-container">
                 <div class="quiz-welcome-card">
-                    <h2 class="quiz-welcome-card-title">Coding Quiz Challenge</h2>
-                    <p class="quiz-welcome-card-description">Try to answer the following code-related questions within the time limit.</p>        
-                    <p class="quiz-welcome-card-description">Keep in mind that incorrect answers will penalize your score/time by 10 seconds!</p>      
-                    <button class="quiz-welcome-card-button">Start Quiz</button>      
+                    <h2 class="quiz-card-title">Coding Quiz Challenge</h2>
+                    <p class="quiz-card-description">Try to answer the following code-related questions within the time limit.</p>        
+                    <p class="quiz-card-description">Keep in mind that incorrect answers will penalize your score/time by 10 seconds!</p>      
+                    <button class="quiz-card-button">Start Quiz</button>      
                 </div>
+
+                <div class="quiz-highscore-container">
+                    <h2 class="quiz-card-title">Highscores</h2>
+                    <ol>
+                        <li>SJ - 43</li>
+                        <li>AJ - 32</li>
+                    </ol>
+                    <button onclick="showWelcomeCard()" class="quiz-card-button">Go Back</button>      
+                    <button class="quiz-card-button">Clear Highscores</button>      
+                </div>
+
             </div>
         </div>
     </main>
     <script src="assets/script.js"></script>
+    <script src="assets/index.js"></script>
 </body>
 
 </html>
