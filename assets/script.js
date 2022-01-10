@@ -61,22 +61,20 @@ function showWelcomeCard(){
 
 
 function startQuiz(){
-    quizWelcomeCard.remove();
-    const deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 50);
-    const countdown = setInterval(()=>{
-    const now = new Date().getTime();
-    const interval = deadline - now
-    const seconds = Math.floor((interval % (1000 * 60)) / 1000);
-    quizTimer.textContent = seconds;
-        if(interval <= 1){
-            clearInterval(countdown)
-        }
-    },1000)
+  quizWelcomeCard.remove();
+  const deadline = new Date();
+  deadline.setSeconds(deadline.getSeconds() + 52);
+  const countdown = setInterval(()=>{
+  const now = new Date().getTime();
+  const interval = deadline - now
+  const seconds = Math.floor((interval % (1000 * 60)) / 1000);
+  quizTimer.textContent = seconds;
+      if(seconds <= 0){
+          clearInterval(countdown)
+      }
+  },1000)
 
 }
-
-
 
 
 
