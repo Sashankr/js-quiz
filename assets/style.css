@@ -58,7 +58,7 @@ header i {
     padding-top : 5rem;
 }
 
-.quiz-welcome-card , .quiz-highscore-container{
+.quiz-welcome-card , .quiz-highscore-container , .quiz-single-question{
     border: 3px solid #c4c4c4;
     padding: 4rem 2rem 2rem;
     border-radius: 25px;
@@ -95,6 +95,29 @@ header i {
     display: none;
 }
 
+.quiz-questions{
+    width: 60%;
+}
+
 .quiz-highscore-container.show{
     display : block;
+}
+
+.quiz-single-question{
+    min-width: calc(100% + 1.5rem);
+}
+
+.quiz-answers-list{
+    padding : 1rem 0;
+}
+
+p.quiz-answer-item {
+    padding: 1rem 0.5rem;
+    background: var(--color-primary);
+    margin: 0.5rem 0;
+    border-radius: 10px;
+    color: var(--color-light);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight : 600;
+    cursor: pointer;
 }

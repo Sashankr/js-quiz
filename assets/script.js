@@ -45,6 +45,8 @@ const quizWelcomeCard = document.querySelector('.quiz-welcome-card');
 const hightScoresContainer = document.querySelector('.quiz-highscore-container');
 const body = document.getElementsByTagName('body');
 const quizTimer = document.querySelector('.quiz-timer');
+const quizQuestions = document.querySelector('.quiz-questions');
+
 
 showHighScoresButton.addEventListener('click',()=>{
     quizWelcomeCard.remove();
@@ -57,28 +59,70 @@ function showWelcomeCard(){
     hightScoresContainer.classList.remove('show');
     hightScoresContainer.remove();
     quizContainer.appendChild(quizWelcomeCard);
+    quizQuestions.remove();
 }
+
+const startTimer = () => {
+
+    const deadline = new Date();
+    deadline.setSeconds(deadline.getSeconds() + 52);
+    const countdown = setInterval(()=>{
+    const now = new Date().getTime();
+    const interval = deadline - now
+    const seconds = Math.floor((interval % (1000 * 60)) / 1000);
+    quizTimer.textContent = seconds;
+        if(seconds <= 0){
+            clearInterval(countdown)
+        }
+    },1000)
+
+}
+
+const createAnswers = (data) => {
+    
+
+}
+
+
+const createQuestions = (data) => {
+    
+        const quizSingleQuestion = document.createElement('div');
+        quizSingleQuestion.classList.add('quiz-single-question');
+
+        const quizQuestionTitle = document.createElement('h2');
+        quizQuestionTitle.textContent = data.questionText
+
+        quizQuestionTitle.classList.add('question-title');
+        quizQuestions.appendChild(quizSingleQuestion);
+        quizSingleQuestion.appendChild(quizQuestionTitle);
+        // createAnswers(data);
+
+        const answerList = document.createElement('div');
+    answerList.classList.add('quiz-answers-list');
+    quizSingleQuestion.appendChild(answerList);
+    data.options.forEach((answer)=>{
+        const answerItem = document.createElement('p');
+        answerItem.classList.add('quiz-answer-item');
+        answerList.appendChild(answerItem);
+        answerItem.textContent = answer;
+    })
+
+}
+
 
 
 function startQuiz(){
-  quizWelcomeCard.remove();
-  const deadline = new Date();
-  deadline.setSeconds(deadline.getSeconds() + 52);
-  const countdown = setInterval(()=>{
-  const now = new Date().getTime();
-  const interval = deadline - now
-  if(interval !== null){
-    debugger;
-    const seconds = Math.floor((interval % (1000 * 60)) / 1000);
-    quizTimer.textContent = seconds;
-    if(seconds <= 0){
-      clearInterval(countdown)
-  }
-  }
+    quizWelcomeCard.remove();
+    hightScoresContainer.remove();
+ 
+    startTimer();
 
-  },1000)
-
+    quizContainer.appendChild(quizQuestions);
+    questions.forEach((data,index)=>{
+        createQuestions(data);
+    })
 }
+
 
 
 
