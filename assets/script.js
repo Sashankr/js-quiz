@@ -67,11 +67,15 @@ function startQuiz(){
   const countdown = setInterval(()=>{
   const now = new Date().getTime();
   const interval = deadline - now
-  const seconds = Math.floor((interval % (1000 * 60)) / 1000);
-  quizTimer.textContent = seconds;
-      if(seconds <= 0){
-          clearInterval(countdown)
-      }
+  if(interval !== null){
+    debugger;
+    const seconds = Math.floor((interval % (1000 * 60)) / 1000);
+    quizTimer.textContent = seconds;
+    if(seconds <= 0){
+      clearInterval(countdown)
+  }
+  }
+
   },1000)
 
 }
