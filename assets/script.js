@@ -45,11 +45,14 @@ const quizWelcomeCard = document.querySelector('.quiz-welcome-card');
 const hightScoresContainer = document.querySelector('.quiz-highscore-container');
 const body = document.getElementsByTagName('body');
 const quizTimer = document.querySelector('.quiz-timer');
-const quizQuestions = document.querySelector('.quiz-questions');
-
+const quizQuestions = document.createElement('div');
+quizQuestions.classList.add('quiz-questions');
+let selectCount = 0;
+let questionIndex = 0;
 
 showHighScoresButton.addEventListener('click',()=>{
     quizWelcomeCard.remove();
+    quizQuestions.remove();
     hightScoresContainer.classList.add('show');
     quizContainer.appendChild(hightScoresContainer)
 })
@@ -58,8 +61,8 @@ showHighScoresButton.addEventListener('click',()=>{
 function showWelcomeCard(){
     hightScoresContainer.classList.remove('show');
     hightScoresContainer.remove();
-    quizContainer.appendChild(quizWelcomeCard);
     quizQuestions.remove();
+    quizContainer.appendChild(quizWelcomeCard);
 }
 
 const startTimer = () => {
@@ -78,13 +81,7 @@ const startTimer = () => {
 
 }
 
-const createAnswers = (data) => {
-    
-
-}
-
-
-const createQuestions = (data) => {
+const createQuestions = (data,index) => {
     
         const quizSingleQuestion = document.createElement('div');
         quizSingleQuestion.classList.add('quiz-single-question');
@@ -95,21 +92,80 @@ const createQuestions = (data) => {
         quizQuestionTitle.classList.add('question-title');
         quizQuestions.appendChild(quizSingleQuestion);
         quizSingleQuestion.appendChild(quizQuestionTitle);
-        // createAnswers(data);
+        quizSingleQuestion.setAttribute('data-key',index);
 
-        const answerList = document.createElement('div');
+    const answerList = document.createElement('div');
     answerList.classList.add('quiz-answers-list');
     quizSingleQuestion.appendChild(answerList);
     data.options.forEach((answer)=>{
-        const answerItem = document.createElement('p');
+        const answerItem = document.createElement('button');
         answerItem.classList.add('quiz-answer-item');
         answerList.appendChild(answerItem);
         answerItem.textContent = answer;
     })
 
+
 }
 
 
+const showResult = (content,question,count) => {
+    if(count === 1){
+    const currentAnswer = document.createElement('p');
+    question.appendChild(currentAnswer);
+    currentAnswer.textContent = content;
+    questionIndex++;
+    console.log(questionIndex)
+    debugger;
+    showQuestion(questionIndex)
+    }
+
+}
+
+const selectAnswer = (answers,index,question) => {
+
+
+    answers.addEventListener('click',()=>{
+        if(answers.textContent === questions[index].answer){
+            selectCount++
+            showResult('Correct!',question,selectCount)
+        }
+        else{
+            selectCount++;
+            showResult('InCorrect!',question,selectCount)
+        }
+    },{
+        once : true
+    })
+}
+
+const showAnswer = (question,index) => {
+    console.log('question',question);
+
+    const answers = question.querySelector('.quiz-answers-list');
+    const answersList = answers.querySelectorAll('.quiz-answer-item');
+    answersList.forEach((el)=>{
+        selectAnswer(el,index,question)    
+    })
+    
+}
+
+const showQuestion = (index) => {
+
+    questions.forEach((data,index)=>{
+        createQuestions(data,index);
+    })
+
+    const questionsList = document.querySelectorAll('.quiz-single-question');
+
+    questionsList.forEach((el,questionIndex)=>{
+        if(questionIndex !== index){
+            el.remove();
+        }
+    })
+
+let quizSingleQuestion = document.querySelector(`[data-key="${index}"]`);
+showAnswer(quizSingleQuestion, index);
+}
 
 function startQuiz(){
     quizWelcomeCard.remove();
@@ -118,9 +174,7 @@ function startQuiz(){
     startTimer();
 
     quizContainer.appendChild(quizQuestions);
-    questions.forEach((data,index)=>{
-        createQuestions(data);
-    })
+    showQuestion(0)
 }
 
 

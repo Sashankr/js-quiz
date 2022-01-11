@@ -19,12 +19,13 @@ ol li{
 }
 
 @font-face {
-  font-family: Verdana;
-  src: url('./fonts/fa-solid-900.woff2');
+  font-family: "Verdana";
+  src: url('./fonts/fa-solid-900.woff2') format("woff2");
+  
 }
 
 body{
-    font-family: Verdana;
+    font-family: "Verdana";
 }
 
 header{
@@ -111,7 +112,7 @@ header i {
     padding : 1rem 0;
 }
 
-p.quiz-answer-item {
+.quiz-answer-item {
     padding: 1rem 0.5rem;
     background: var(--color-primary);
     margin: 0.5rem 0;
@@ -119,5 +120,11 @@ p.quiz-answer-item {
     color: var(--color-light);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight : 600;
+    font-size: 17px;
     cursor: pointer;
+    border : unset;
+    outline : unset;
+    display: block;
+    width : 100%;
+    text-align: left;
 }
