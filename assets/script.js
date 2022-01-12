@@ -114,24 +114,27 @@ const showResult = (content,question,count) => {
     question.appendChild(currentAnswer);
     currentAnswer.textContent = content;
     questionIndex++;
-    console.log(questionIndex)
-    debugger;
-    showQuestion(questionIndex)
+    setTimeout(()=>{
+        showQuestion(questionIndex)
+    },1000)
     }
 
 }
 
 const selectAnswer = (answers,index,question) => {
+    selectCount = 0;
 
-
-    answers.addEventListener('click',()=>{
+    answers.addEventListener('click',(event)=>{
         if(answers.textContent === questions[index].answer){
             selectCount++
             showResult('Correct!',question,selectCount)
         }
         else{
+
+
             selectCount++;
             showResult('InCorrect!',question,selectCount)
+
         }
     },{
         once : true
@@ -157,14 +160,17 @@ const showQuestion = (index) => {
 
     const questionsList = document.querySelectorAll('.quiz-single-question');
 
-    questionsList.forEach((el,questionIndex)=>{
-        if(questionIndex !== index){
+    questionsList.forEach((el)=>{
+        console.log(el.getAttribute('data-key'))
+        if(el.getAttribute('data-key') !== `${index}`){
             el.remove();
         }
     })
 
+
 let quizSingleQuestion = document.querySelector(`[data-key="${index}"]`);
 showAnswer(quizSingleQuestion, index);
+
 }
 
 function startQuiz(){
