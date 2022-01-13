@@ -45,194 +45,260 @@ const quizWelcomeCard = document.querySelector('.quiz-welcome-card');
 const hightScoresContainer = document.querySelector('.quiz-highscore-container');
 const body = document.getElementsByTagName('body');
 const quizTimer = document.querySelector('.quiz-timer');
+const listWrapper = document.querySelector('.list-wrapper');
 const quizQuestions = document.createElement('div');
 quizQuestions.classList.add('quiz-questions');
+const highscoreList = document.createElement('ol');
+highscoreList.classList.add('quiz-highscores-list');
+
 let selectCount = 0;
 let questionIndex = 0;
 let score;
 let stopTimer = false;
+let timerValue = 50;
+let users = [];
+let gameEnd = false;
 
-showHighScoresButton.addEventListener('click',()=>{
-    quizWelcomeCard.remove();
-    quizQuestions.remove();
-    hightScoresContainer.classList.add('show');
-    quizContainer.appendChild(hightScoresContainer)
+
+const showHighScores = () => {
+  quizTimer.textContent = '';
+
+  document.querySelectorAll('.highscore-item').forEach((el)=>{
+    el.remove();
+  })
+  quizWelcomeCard.classList.add('hide');
+  quizQuestions.classList.add('hide');
+  hightScoresContainer.classList.add('show');
+  quizContainer.appendChild(hightScoresContainer)
+
+  listWrapper.appendChild(highscoreList)
+  const data = JSON.parse(localStorage.getItem('user_scores' || "[]"))
+  data.forEach((scoreData) => {
+    const listItem = document.createElement('li');
+    listItem.classList.add('highscore-item')
+    highscoreList.appendChild(listItem);
+    listItem.textContent = `${scoreData.name} -  ${scoreData.score}`
+  })
+  
+}
+
+const clearHighScores = () =>{
+  localStorage.clear();
+  document.querySelectorAll('.highscore-item').forEach((el)=>{
+    el.remove();
+  })
+}
+
+showHighScoresButton.addEventListener('click', () => {
+  showHighScores()
 })
-// function stopTimer(){
-//   startTimer = true;
-// }
 
 
-function showWelcomeCard(){
-    hightScoresContainer.classList.remove('show');
-    hightScoresContainer.remove();
-    quizQuestions.remove();
-    quizContainer.appendChild(quizWelcomeCard);
+function showWelcomeCard() {
+  hightScoresContainer.classList.remove('show');
+  quizWelcomeCard.classList.remove('hide')
+  quizQuestions.classList.add('hide');
+  // startQuiz();
 }
 
 const startTimer = () => {
 
-    const deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 52);
-    const countdown = setInterval(()=>{
-    const now = new Date().getTime();
-    const interval = deadline - now
-    const seconds = Math.floor((interval % (1000 * 60)) / 1000);
-    score = seconds;
-    quizTimer.textContent = seconds;
-        if(stopTimer || seconds <= 0){
-            clearInterval(countdown)
-        }
-    },1000)
+
+  const countdown = setInterval(() => {
+
+    if (stopTimer || timerValue + 1 <= 0) {
+      clearInterval(countdown)
+      if (timerValue + 1 <= 0) {
+        endGame()
+      }
+    }
+    else {
+      score = timerValue;
+      quizTimer.textContent = timerValue;
+    }
+    timerValue -= 1;
+
+
+  }, 1000)
 
 }
 
-const createQuestions = (data,index) => {
-    
-        const quizSingleQuestion = document.createElement('div');
-        quizSingleQuestion.classList.add('quiz-single-question');
+const createQuestions = (data, index) => {
 
-        const quizQuestionTitle = document.createElement('h2');
-        quizQuestionTitle.textContent = data.questionText
+  const quizSingleQuestion = document.createElement('div');
+  quizSingleQuestion.classList.add('quiz-single-question');
 
-        quizQuestionTitle.classList.add('question-title');
-        quizQuestions.appendChild(quizSingleQuestion);
-        quizSingleQuestion.appendChild(quizQuestionTitle);
-        quizSingleQuestion.setAttribute('data-key',index);
+  const quizQuestionTitle = document.createElement('h2');
+  quizQuestionTitle.textContent = data.questionText
 
-    const answerList = document.createElement('div');
-    answerList.classList.add('quiz-answers-list');
-    quizSingleQuestion.appendChild(answerList);
-    data.options.forEach((answer)=>{
-        const answerItem = document.createElement('button');
-        answerItem.classList.add('quiz-answer-item');
-        answerList.appendChild(answerItem);
-        answerItem.textContent = answer;
-    })
+  quizQuestionTitle.classList.add('question-title');
+  quizQuestions.appendChild(quizSingleQuestion);
+  quizSingleQuestion.appendChild(quizQuestionTitle);
+  quizSingleQuestion.setAttribute('data-key', index);
 
-
+  const answerList = document.createElement('div');
+  answerList.classList.add('quiz-answers-list');
+  quizSingleQuestion.appendChild(answerList);
+  data.options.forEach((answer) => {
+    const answerItem = document.createElement('button');
+    answerItem.classList.add('quiz-answer-item');
+    answerList.appendChild(answerItem);
+    answerItem.textContent = answer;
+  })
 }
 
 
 
-const endGame = () =>{
-    quizQuestions.remove();
-    // stopTimer();
-    stopTimer = true
+const endGame = () => {
+  quizQuestions.remove();
+  // stopTimer();
+  stopTimer = true
 
-    const endgameContainer =  document.createElement('div');
-    endgameContainer.classList.add('endgame-card');
-    quizContainer.appendChild(endgameContainer);
-    
-    const endgameTitle = document.createElement('h2');
-    endgameTitle.textContent = 'Add Done!';
-    endgameContainer.appendChild(endgameTitle);
+  const endgameContainer = document.createElement('div');
+  endgameContainer.classList.add('endgame-card');
+  quizContainer.appendChild(endgameContainer);
 
-    const endgameScore = document.createElement('p');
-    endgameScore.textContent = `Your final score is ${score - 1}`;
-    endgameContainer.appendChild(endgameScore);
+  const endgameTitle = document.createElement('h2');
+  endgameTitle.textContent = 'Add Done!';
+  endgameContainer.appendChild(endgameTitle);
 
-    const initialsData = document.createElement('div');
-    initialsData.classList.add('initials-data');
+  const endgameScore = document.createElement('p');
+  endgameScore.textContent = `Your final score is ${score}`;
+  endgameContainer.appendChild(endgameScore);
 
-    endgameContainer.appendChild(initialsData);
+  const initialsData = document.createElement('div');
+  initialsData.classList.add('initials-data');
 
-    const initialsText = document.createElement('p');
-    initialsText.textContent = 'Enter initials : '
-    initialsData.appendChild(initialsText);
+  endgameContainer.appendChild(initialsData);
 
-    const initialsInput = document.createElement('input');
-    initialsInput.setAttribute("type", "text"); 
+  const initialsText = document.createElement('p');
+  initialsText.textContent = 'Enter initials : '
+  initialsData.appendChild(initialsText);
 
-    initialsData.appendChild(initialsInput);
+  const initialsInput = document.createElement('input');
+  initialsInput.setAttribute("type", "text");
 
-    const initialsSubmitButton = document.createElement('button');
-    initialsSubmitButton.classList.add('initials-submit');
-    initialsSubmitButton.textContent = 'Submit';
+  initialsData.appendChild(initialsInput);
 
-    initialsData.appendChild(initialsSubmitButton); 
+  const initialsSubmitButton = document.createElement('button');
+  initialsSubmitButton.classList.add('initials-submit');
+  initialsSubmitButton.textContent = 'Submit';
+
+  initialsData.appendChild(initialsSubmitButton);
+
+  initialsSubmitButton.addEventListener('click', () => {
+    if (initialsInput.value.trim() === '') {
+      initialsInput.style.border = '2px solid red';
+    }
+    else {
+      initialsInput.style.border = '2px solid #b2afaf';
+      users.push({
+        name: initialsInput.value,
+        score: score
+      })
+      gameEnd = true;
+      localStorage.setItem('user_scores', JSON.stringify(users))
+      endgameContainer.remove();
+      showHighScores();
+    }
+  })
+
+  initialsInput.addEventListener('change', () => {
+    if (initialsInput.value.trim() !== '') {
+      initialsInput.style.border = '2px solid #b2afaf';
+    }
+    else {
+      initialsInput.style.border = '2px solid red';
+    }
+  })
 
 
 }
 
-const showResult = (content,question,count) => {
-    if(count === 1){
+const showResult = (content, question, count) => {
+  if (count === 1) {
     const currentAnswer = document.createElement('p');
     question.appendChild(currentAnswer);
+    if (content === 'InCorrect!') {
+      timerValue -= 10;
+      console.log('show', timerValue);
+    }
     currentAnswer.textContent = content;
     questionIndex++;
-    setTimeout(()=>{
-        if(questionIndex <= questions.length - 1){
+    setTimeout(() => {
+      if (questionIndex <= questions.length - 1) {
         showQuestion(questionIndex)
-        }
-        else{
-            endGame();
-        }
-    },1000)
+      }
+      else {
+        endGame();
+      }
+    }, 1000)
+  }
+
+}
+
+const selectAnswer = (answers, index, question) => {
+  selectCount = 0;
+
+  answers.addEventListener('click', (event) => {
+    if (answers.textContent === questions[index].answer) {
+      selectCount++
+      showResult('Correct!', question, selectCount)
     }
+    else {
 
+
+      selectCount++;
+      showResult('InCorrect!', question, selectCount)
+
+    }
+  }, {
+    once: true
+  })
 }
 
-const selectAnswer = (answers,index,question) => {
-    selectCount = 0;
+const showAnswer = (question, index) => {
 
-    answers.addEventListener('click',(event)=>{
-        if(answers.textContent === questions[index].answer){
-            selectCount++
-            showResult('Correct!',question,selectCount)
-        }
-        else{
+  const answers = question.querySelector('.quiz-answers-list');
+  const answersList = answers.querySelectorAll('.quiz-answer-item');
+  answersList.forEach((el) => {
+    selectAnswer(el, index, question)
+  })
 
-
-            selectCount++;
-            showResult('InCorrect!',question,selectCount)
-
-        }
-    },{
-        once : true
-    })
-}
-
-const showAnswer = (question,index) => {
-    console.log('question',question);
-
-    const answers = question.querySelector('.quiz-answers-list');
-    const answersList = answers.querySelectorAll('.quiz-answer-item');
-    answersList.forEach((el)=>{
-        selectAnswer(el,index,question)    
-    })
-    
 }
 
 const showQuestion = (index) => {
 
-    questions.forEach((data,index)=>{
-        createQuestions(data,index);
-    })
+  questions.forEach((data, index) => {
+    createQuestions(data, index);
+  })
 
-    const questionsList = document.querySelectorAll('.quiz-single-question');
+  const questionsList = document.querySelectorAll('.quiz-single-question');
 
-    questionsList.forEach((el)=>{
-        console.log(el.getAttribute('data-key'))
-        if(el.getAttribute('data-key') !== `${index}`){
-            el.remove();
-        }
-    })
+  questionsList.forEach((el) => {
+    console.log(el.getAttribute('data-key'))
+    if (el.getAttribute('data-key') !== `${index}`) {
+      el.remove();
+    }
+  })
 
 
-let quizSingleQuestion = document.querySelector(`[data-key="${index}"]`);
-showAnswer(quizSingleQuestion, index);
+  let quizSingleQuestion = document.querySelector(`[data-key="${index}"]`);
+  showAnswer(quizSingleQuestion, index);
 
 }
 
-function startQuiz(){
-    quizWelcomeCard.remove();
-    hightScoresContainer.remove();
- 
-    startTimer();
+function startQuiz() {
+  quizWelcomeCard.classList.add('hide');
+  hightScoresContainer.classList.add('hide');
+  quizContainer.appendChild(quizQuestions);
+  quizQuestions.classList.remove('hide')
+  showQuestion(0)
+  timerValue = 50;
+  stopTimer = false;
+  questionIndex = 0;
+  startTimer();
 
-    quizContainer.appendChild(quizQuestions);
-    showQuestion(0)
 }
 
 
