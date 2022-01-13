@@ -84,6 +84,7 @@ const showHighScores = () => {
 }
 
 const clearHighScores = () =>{
+  users = [];
   localStorage.clear();
   document.querySelectorAll('.highscore-item').forEach((el)=>{
     el.remove();
