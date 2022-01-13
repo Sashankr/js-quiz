@@ -61,6 +61,7 @@ let gameEnd = false;
 
 
 const showHighScores = () => {
+  stopTimer = true;
   quizTimer.textContent = '';
 
   document.querySelectorAll('.highscore-item').forEach((el)=>{
@@ -95,10 +96,14 @@ showHighScoresButton.addEventListener('click', () => {
 
 
 function showWelcomeCard() {
+  const header = document.querySelector('header');
+  header.classList.remove('flex-end');
+
   hightScoresContainer.classList.remove('show');
   quizWelcomeCard.classList.remove('hide')
   quizQuestions.classList.add('hide');
   // startQuiz();
+  showHighScoresButton.classList.remove('hide');
 }
 
 const startTimer = () => {
@@ -108,7 +113,7 @@ const startTimer = () => {
 
     if (stopTimer || timerValue + 1 <= 0) {
       clearInterval(countdown)
-      if (timerValue + 1 <= 0) {
+      if (timerValue + 1 <= 0 && gameEnd) {
         endGame()
       }
     }
@@ -152,14 +157,13 @@ const createQuestions = (data, index) => {
 const endGame = () => {
   quizQuestions.remove();
   // stopTimer();
-  stopTimer = true
 
   const endgameContainer = document.createElement('div');
   endgameContainer.classList.add('endgame-card');
   quizContainer.appendChild(endgameContainer);
 
   const endgameTitle = document.createElement('h2');
-  endgameTitle.textContent = 'Add Done!';
+  endgameTitle.textContent = 'All Done!';
   endgameContainer.appendChild(endgameTitle);
 
   const endgameScore = document.createElement('p');
@@ -230,6 +234,7 @@ const showResult = (content, question, count) => {
         showQuestion(questionIndex)
       }
       else {
+        stopTimer= true;
         endGame();
       }
     }, 1000)
@@ -246,8 +251,6 @@ const selectAnswer = (answers, index, question) => {
       showResult('Correct!', question, selectCount)
     }
     else {
-
-
       selectCount++;
       showResult('InCorrect!', question, selectCount)
 
@@ -276,7 +279,6 @@ const showQuestion = (index) => {
   const questionsList = document.querySelectorAll('.quiz-single-question');
 
   questionsList.forEach((el) => {
-    console.log(el.getAttribute('data-key'))
     if (el.getAttribute('data-key') !== `${index}`) {
       el.remove();
     }
@@ -299,6 +301,9 @@ function startQuiz() {
   questionIndex = 0;
   startTimer();
 
+  showHighScoresButton.classList.add('hide')
+  const header = document.querySelector('header');
+  header.classList.add('flex-end');
 }
 
 

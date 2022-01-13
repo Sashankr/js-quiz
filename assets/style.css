@@ -95,6 +95,13 @@ header i {
 .quiz-highscore-container{
     display: none;
 }
+header.flex-end{
+    justify-content: flex-end;
+}
+
+#leaderboard.hide{
+  display: none;  
+}
 
 .quiz-questions{
     width: 60%;
@@ -157,4 +164,23 @@ header i {
     width: 80px;
     padding: 5px;
     border: 2px solid #b2afaf;
+}
+
+@media(max-width: 525px){
+    .quiz-card-title{
+        font-size: 1.25rem;
+    }
+    .quiz-card-description{
+        font-size: 1rem;
+    }
+    .quiz-questions{
+        width: 100%;
+    }
+    .quiz-single-question{
+        min-width: unset;
+    }
+
+    .question-title{
+        font-size: 1.25rem;
+    }
 }
