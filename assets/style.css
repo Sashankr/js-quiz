@@ -59,7 +59,7 @@ header i {
     padding-top : 5rem;
 }
 
-.quiz-welcome-card , .quiz-highscore-container , .quiz-single-question{
+.quiz-welcome-card , .quiz-highscore-container , .quiz-single-question, .endgame-card {
     border: 3px solid #c4c4c4;
     padding: 4rem 2rem 2rem;
     border-radius: 25px;
@@ -79,7 +79,7 @@ header i {
 }
 
 
-.quiz-card-button{
+.quiz-card-button , .initials-data button{
     background : var(--color-primary);
     color: var(--color-light);
     padding : 15px 20px;
@@ -127,4 +127,30 @@ header i {
     display: block;
     width : 100%;
     text-align: left;
+}
+
+.initials-data{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.endgame-card h2 , .endgame-card p{
+    margin-bottom: 1rem;
+}
+
+.initials-data p{
+    margin-bottom : unset;
+}
+
+.initials-data button{
+    margin-top: unset;
+    padding: 10px;
+}
+
+.initials-data input{
+    width: 80px;
+    padding: 5px;
+    border: 2px solid #b2afaf;
 }

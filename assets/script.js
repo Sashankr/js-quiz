@@ -49,6 +49,8 @@ const quizQuestions = document.createElement('div');
 quizQuestions.classList.add('quiz-questions');
 let selectCount = 0;
 let questionIndex = 0;
+let score;
+let stopTimer = false;
 
 showHighScoresButton.addEventListener('click',()=>{
     quizWelcomeCard.remove();
@@ -56,6 +58,9 @@ showHighScoresButton.addEventListener('click',()=>{
     hightScoresContainer.classList.add('show');
     quizContainer.appendChild(hightScoresContainer)
 })
+// function stopTimer(){
+//   startTimer = true;
+// }
 
 
 function showWelcomeCard(){
@@ -73,8 +78,9 @@ const startTimer = () => {
     const now = new Date().getTime();
     const interval = deadline - now
     const seconds = Math.floor((interval % (1000 * 60)) / 1000);
+    score = seconds;
     quizTimer.textContent = seconds;
-        if(seconds <= 0){
+        if(stopTimer || seconds <= 0){
             clearInterval(countdown)
         }
     },1000)
@@ -108,6 +114,47 @@ const createQuestions = (data,index) => {
 }
 
 
+
+const endGame = () =>{
+    quizQuestions.remove();
+    // stopTimer();
+    stopTimer = true
+
+    const endgameContainer =  document.createElement('div');
+    endgameContainer.classList.add('endgame-card');
+    quizContainer.appendChild(endgameContainer);
+    
+    const endgameTitle = document.createElement('h2');
+    endgameTitle.textContent = 'Add Done!';
+    endgameContainer.appendChild(endgameTitle);
+
+    const endgameScore = document.createElement('p');
+    endgameScore.textContent = `Your final score is ${score - 1}`;
+    endgameContainer.appendChild(endgameScore);
+
+    const initialsData = document.createElement('div');
+    initialsData.classList.add('initials-data');
+
+    endgameContainer.appendChild(initialsData);
+
+    const initialsText = document.createElement('p');
+    initialsText.textContent = 'Enter initials : '
+    initialsData.appendChild(initialsText);
+
+    const initialsInput = document.createElement('input');
+    initialsInput.setAttribute("type", "text"); 
+
+    initialsData.appendChild(initialsInput);
+
+    const initialsSubmitButton = document.createElement('button');
+    initialsSubmitButton.classList.add('initials-submit');
+    initialsSubmitButton.textContent = 'Submit';
+
+    initialsData.appendChild(initialsSubmitButton); 
+
+
+}
+
 const showResult = (content,question,count) => {
     if(count === 1){
     const currentAnswer = document.createElement('p');
@@ -115,7 +162,12 @@ const showResult = (content,question,count) => {
     currentAnswer.textContent = content;
     questionIndex++;
     setTimeout(()=>{
+        if(questionIndex <= questions.length - 1){
         showQuestion(questionIndex)
+        }
+        else{
+            endGame();
+        }
     },1000)
     }
 
